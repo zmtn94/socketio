@@ -1,0 +1,17 @@
+doctype html
+html
+   head 
+      meta(charset='UTF-8')
+      title input data
+   body
+      center
+         form(name='form', method='post', action='/input')
+            input(type='text', size='50', name='contents', placeholder='insert any text')
+            input(type='submit', value='ok')
+      script(src="/socket.io/socket.io.js")
+      script.
+         var socket = io('//'+document.location.hostname+':'+document.location.port);
+         socket.on('eventname', function(data){
+            console.log(data);
+         });
+

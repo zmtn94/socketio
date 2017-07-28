@@ -1,0 +1,54 @@
+<html>
+<head>
+   <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   </head>
+   <body>
+   <form id="form1" method='post' action='/image'>
+      <input type='file' name='img' id="imgInp" />
+      <img id="blah" src="#" alt="your image"/>
+      <input type='submit', value='ok'/>
+   </form>
+   <div class="pic">
+      <canvas id="testimg" width="280" height=220" style="border:1px solid #000000;">
+	     your browser does not support the html5 canvas tag.
+	  </canvas>
+	</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+   var socket = io('//'+document.location.hostname+':'+document.location.port);
+   var ctx=document.getElementById('testimg').getContext('2d');
+   socket.on('image',function(data){
+		   console.log(data);
+		   if(data.img){
+		      var img = new Image();
+//			  img.src = 'data:image/jpeg;base64,'+data.buffer;
+			  img.src = 'data:image/jpeg;base64,'+'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 ';
+		   }
+		   ctx.drawImage(img, 0, 0);
+		   console.log("image received");
+		   /*
+		   $("#imgInp").change(function(){
+				   readURL(this);
+		   });
+		   var reader = new FileReader();
+		   reader.onload = function(e){
+		      $('#blah').attr('src', e.target.result);
+		   }
+		   reader.readAsDataURL(data);*/
+   });
+   $("#imgInp").change(function(){
+		readURL(this);
+   });
+   function readURL(input){
+	   if(input.files && input.files[0]){
+		   var reader = new FileReader();
+
+		   reader.onload = function(e){
+			   $('#blah').attr('src', e.target.result);
+		   }
+		   reader.readAsDataURL(input.files[0]);
+	   }
+   }
+</script>
+</body>
+

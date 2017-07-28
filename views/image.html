@@ -1,0 +1,64 @@
+<html>
+<head>
+   <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   </head>
+   <body>
+   <form name='form' id="form1" method='post' action='/image' enctype='multipart/form-data'>
+      <input type='file' name='image' id="imgInp" />
+      <img id="blah" src="#" alt="your image"/>
+      <input type='submit', value='ok'/>
+   </form>
+   <div class="pic">
+      <canvas id="testimg" width="280" height="220" style="border:1px solid #000000;">
+	     your browser does not support the html5 canvas tag.
+	  </canvas>
+	</div>
+	<div class="testpic">
+	   <img id="testpicture" width="280" height="220">
+	   </img>
+	</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+   var socket = io('//'+document.location.hostname+':'+document.location.port);
+   socket.on('image',function(data){
+		//url
+		   $("#testpicture").each(function(img){
+				$(this).attr("src", data.url) });
+
+           var ctx=document.getElementById('testimg').getContext('2d');
+		   console.log(data);
+		   console.log("url=",data.url);
+
+		   
+		   var testimg = new Image();
+		   testimg.src = 'data:image/jpeg;base64,'+data.buffer;
+		   ctx.drawImage(testimg, 0, 0);
+		   console.log("image received");
+		   //canvas error 
+			 
+		   /*
+		   $("#imgInp").change(function(){
+				   readURL(this);
+		   });
+		   var reader = new FileReader();
+		   reader.onload = function(e){
+		      $('#blah').attr('src', e.target.result);
+		   }
+		   reader.readAsDataURL(data);*/
+   });
+   $("#imgInp").change(function(){
+		readURL(this);
+   });
+   function readURL(input){
+	   if(input.files && input.files[0]){
+		   var reader = new FileReader();
+
+		   reader.onload = function(e){
+			   $('#blah').attr('src', e.target.result);
+		   }
+		   reader.readAsDataURL(input.files[0]);
+	   }
+   }
+</script>
+</body>
+
